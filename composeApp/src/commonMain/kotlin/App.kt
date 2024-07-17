@@ -32,13 +32,15 @@ fun App(manager: BatteryManager) {
             ) {
 
                 composable("home") {
-                    val viewModel = koinViewModel<MyViewModel>()
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Column {
-                            Image(painterResource(Res.drawable.ic_android_black_24dp), null)
-                            Text(text = viewModel.getHelloWorld() + " ${manager.getBatteryLevel()}")
-                        }
-                    }
+//                    val viewModel = koinViewModel<MyViewModel>()
+//                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//                        Column {
+//                            Image(painterResource(Res.drawable.ic_android_black_24dp), null)
+//                            Text(text = viewModel.getHelloWorld() + " ${manager.getBatteryLevel()}")
+//                        }
+//                    }
+
+                    Counter()
                 }
             }
 

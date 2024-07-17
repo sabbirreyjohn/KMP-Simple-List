@@ -11,5 +11,4 @@ class MyRepositoryImpl(
     override fun helloWorld(): String {
         return "Hello World"
     }
-
 }
