@@ -1,0 +1,46 @@
+package home
+
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.util.network.UnresolvedAddressException
+import kotlinx.serialization.SerializationException
+import network.NetworkError
+import network.ProductResponse
+import network.Result
+import network.createHttpClient
+
+interface DataRepository {
+    suspend fun getProducts(lastUserId: Int): Result<ProductResponse, NetworkError>
+    //suspend fun getProfile(username: String?): NetworkResult<Profile>
+}
+
+class DataRepositoryImpl(private val httpClient: HttpClient):
+    DataRepository {
+    override suspend fun getProducts(lastUserId: Int): Result<ProductResponse, NetworkError> {
+        val response = try {
+            httpClient.get("https://dummyjson.com/products") {
+                parameter("skip", "0")
+            }
+        } catch (e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        } catch (e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+
+        return when (response.status.value) {
+            in 200..299 -> {
+                val output = response.body<ProductResponse>()
+                Result.Success(output)
+            }
+
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+}

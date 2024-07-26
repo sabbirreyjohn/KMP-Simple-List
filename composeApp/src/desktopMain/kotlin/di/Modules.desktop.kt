@@ -1,10 +1,11 @@
 package di
 
-import dependencies.DbClient
-import org.koin.core.module.Module
+import io.ktor.client.engine.okhttp.OkHttp
+import network.createHttpClient
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
+import home.HomeViewModel
 
 actual val platformModule = module {
-    singleOf(::DbClient)
+    single { createHttpClient(OkHttp.create()) }
 }

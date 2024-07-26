@@ -70,6 +70,9 @@ kotlin {
             implementation(libs.navigation.compose)
 
             implementation(libs.bundles.ktor)
+
+            implementation(libs.coil.compose)
+            implementation(libs.kamel.image)
         }
 
         commonTest.dependencies {
@@ -89,6 +92,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.oshi.core)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }
@@ -141,5 +145,12 @@ compose.desktop {
             packageName = "xyz.androidrey.kmp"
             packageVersion = "1.0.0"
         }
+    }
+}
+
+configurations.all{
+    resolutionStrategy{
+        force("androidx.compose.ui:ui-test-junit4:1.6.8")
+        force("androidx.compose.ui:ui-test:1.6.8")
     }
 }

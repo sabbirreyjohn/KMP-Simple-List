@@ -1,11 +1,9 @@
 package di
 
-import dependencies.DbClient
-import dependencies.MyViewModel
-import org.koin.compose.viewmodel.dsl.viewModelOf
-import org.koin.core.module.dsl.singleOf
+import io.ktor.client.engine.darwin.Darwin
+import network.createHttpClient
 import org.koin.dsl.module
 
 actual val platformModule = module {
-    singleOf(::DbClient)
+    single { createHttpClient(Darwin.create()) }
 }
